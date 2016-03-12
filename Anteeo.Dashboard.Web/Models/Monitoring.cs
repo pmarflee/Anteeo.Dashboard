@@ -56,6 +56,8 @@ namespace Anteeo.Dashboard.Web.Models
 
         public Status? Status { get; set; }
 
+        public string Message { get; set; }
+
         public IList<Database> Databases { get; private set; }
     }
 
@@ -64,5 +66,7 @@ namespace Anteeo.Dashboard.Web.Models
         public string Name { get; set; }
 
         public Status? Status { get; set; }
+
+        public string Message { get; set; }
     }
 }

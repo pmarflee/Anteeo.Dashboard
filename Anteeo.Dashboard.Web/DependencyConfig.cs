@@ -1,9 +1,6 @@
 ﻿using Anteeo.Dashboard.Web.Configuration;
 using Anteeo.Dashboard.Web.Models;
 using Anteeo.Dashboard.Web.Monitoring;
-using Anteeo.Dashboard.Web.SignalR;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using SimpleInjector;
 using SimpleInjector.Integration.Web;
 using System.Reflection;

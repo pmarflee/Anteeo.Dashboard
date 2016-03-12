@@ -22,12 +22,14 @@ app.controller('DashboardCtrl', ['$scope', '$log', 'backendHubProxy',
             switch (result.type) {
                 case "website":
                     source.status = result.status;
+                    source.message = result.message;
                     break;
                 case "database":
                     var database = source.databases.find(function (database) {
                         return database.name === result.name;
                     });
                     database.status = result.status;
+                    database.message = source.message;
                     break;
             }
         });

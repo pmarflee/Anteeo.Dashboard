@@ -40,9 +40,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
 
             SetCurrentStatus(Enumerable.Empty<MonitoringResult>());
 
-            _timerProvider.Register(
-                async state => await OnMonitor(state),
-                TimeSpan.FromMilliseconds(_configuration.PollInterval));
+            _timerProvider.Register(async state => await OnMonitor(state), _configuration.PollInterval);
         }
 
         public Models.Monitoring GetCurrentStatus()

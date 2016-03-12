@@ -2,6 +2,8 @@
 
 angular.module('dashboard', [
     'ngRoute',
+    'ngAnimate',
+    'ui.bootstrap',
     'dashboard.services',
     'dashboard.directives',
     'dashboard.controllers'])

@@ -18,12 +18,9 @@ input[type="email"] {
     max-width: 280px;
 }*/
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-    .jumbotron {
-        margin-top: 20px;
-    }
-    .body-content {
-        padding: 0;
-    }
+div.panel-success,
+div.panel-warning,
+div.panel-danger {
+  -webkit-animation-name: flash;
+  animation-name: flash;
 }

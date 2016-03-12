@@ -73,7 +73,13 @@ namespace Anteeo.Dashboard.Web.Models
             IEnumerable<MonitoringResult> results)
         {
             var sourceResult = results.FirstOrDefault(result => result.Type == MonitoringResultType.Website);
-            var sourceModel = new Source { Name = source.Name, Url = source.Url, Status = sourceResult?.Status };
+            var sourceModel = new Source
+            {
+                Name = source.Name,
+                Url = source.Url,
+                Status = sourceResult?.Status,
+                Message = sourceResult?.Message
+            };
 
             var pairs = from database in source.Databases
                         join result in results.Where(result => result.Type == MonitoringResultType.Database)
@@ -86,7 +92,8 @@ namespace Anteeo.Dashboard.Web.Models
                 sourceModel.Databases.Add(new Database
                 {
                     Name = pair.database.Name,
-                    Status = pair.result?.Status
+                    Status = pair.result?.Status,
+                    Message = pair.result?.Message
                 });
             }
 
