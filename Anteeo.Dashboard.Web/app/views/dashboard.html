@@ -1,0 +1,61 @@
+﻿<h2>Dashboard</h2>
+<hr />
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2 class="panel-title"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Anteeo Solutions Monitoring Dashboard</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row" ng-repeat="environment in dashboard.environments">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-server fa-3x"></i>&nbsp;{{ environment.name }}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" ng-repeat="group in environment.groups">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <i class="fa fa-folder fa-2x"></i>
+                                            &nbsp;{{ group.name }}
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-4" ng-repeat="source in group.sources">
+                                            <div class="panel" ng-class="getPanelStatus(source.status)">
+                                                <div class="panel-heading">
+                                                    <h5 class="panel-title">
+                                                        <i class="fa fa-globe fa-lg"></i>
+                                                        &nbsp;<a href="{{ source.url}}" target="_blank">{{ source.name }}</a>
+                                                    </h5>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3" ng-repeat="database in source.databases">
+                                                            <div class="panel" ng-class="getPanelStatus(database.status)">
+                                                                <div class="panel-heading">
+                                                                    <h6 class="panel-title">
+                                                                        <i class="fa fa-database"></i>
+                                                                        {{ database.name }}
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
