@@ -22,8 +22,6 @@ namespace Anteeo.Dashboard.Web
 
             builder.RegisterType<MonitoringFactory>().AsImplementedInterfaces().SingleInstance();
 
-            builder.RegisterType<TimerProvider>().AsImplementedInterfaces().SingleInstance();
-
             builder.RegisterType<MonitoringService>().AsImplementedInterfaces().SingleInstance();
 
             builder.RegisterHubs(Assembly.GetExecutingAssembly());

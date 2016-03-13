@@ -203,7 +203,6 @@
     <Compile Include="Configuration\MonitoringSourceElement.cs" />
     <Compile Include="Configuration\MonitoringSourceElementCollection.cs" />
     <Compile Include="Models\MonitoringFactory.cs" />
-    <Compile Include="Monitoring\TimerProvider.cs" />
     <Compile Include="SignalR\SignalRContractResolver.cs" />
     <Compile Include="SignalR\SignalRStartup.cs" />
     <Compile Include="SignalR\MonitoringHub.cs" />
