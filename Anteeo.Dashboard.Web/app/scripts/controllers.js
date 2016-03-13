@@ -3,6 +3,9 @@
 app.controller('DashboardCtrl', ['$scope', '$log', 'backendHubProxy', 'Notification',
     function ($scope, $log, backendHubProxy, Notification) {
         $scope.dashboard = {};
+        $scope.getPanelStatus = function (status) {
+            return status ? 'panel-' + status : 'panel-default';
+        };
 
         var getSource = function (result) {
             var environment = $scope.dashboard.environments.find(function (environment) {
