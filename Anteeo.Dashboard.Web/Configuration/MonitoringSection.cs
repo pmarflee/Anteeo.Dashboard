@@ -13,6 +13,13 @@ namespace Anteeo.Dashboard.Web.Configuration
             set { base["pollInterval"] = value; }
         }
 
+        [ConfigurationProperty("performancePollInterval", IsKey = false, IsRequired = true)]
+        public int PerformancePollInterval
+        {
+            get { return (int)base["performancePollInterval"]; }
+            set { base["performancePollInterval"] = value; }
+        }
+
         [ConfigurationProperty("environments")]
         public MonitoringEnvironmentElementCollection Environments
         {

@@ -10,4 +10,9 @@
         public Models.Status Status { get; set; }
         public string Message { get; set; }
     }
+
+    public class PerformanceMonitoringResult : MonitoringResult
+    {
+        public float Value { get; set; }
+    }
 }

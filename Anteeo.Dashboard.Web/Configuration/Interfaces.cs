@@ -5,6 +5,7 @@ namespace Anteeo.Dashboard.Web.Configuration
     public interface IMonitoringConfiguration
     {
         int PollInterval { get; }
+        int PerformancePollInterval { get; }
         ICollection<IMonitoringEnvironmentConfiguration> Environments { get; }
     }
 
@@ -19,6 +20,8 @@ namespace Anteeo.Dashboard.Web.Configuration
         string Name { get; }
         string Group { get; }
         string Url { get; }
+        string ApplicationPool { get; }
+        bool MonitorCPU { get; }
         ICollection<IMonitoringDatabaseConfiguration> Databases { get; }
     }
 

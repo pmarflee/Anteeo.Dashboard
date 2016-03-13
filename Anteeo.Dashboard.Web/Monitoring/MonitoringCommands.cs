@@ -42,4 +42,19 @@ namespace Anteeo.Dashboard.Web.Monitoring
             Connection = database.ConnectionString;
         }
     }
+
+    public class CPUUsageMonitoringCommand : MonitoringCommand
+    {
+        public CPUUsageMonitoringCommand(
+            IMonitoringEnvironmentConfiguration environment,
+            IMonitoringSourceConfiguration source)
+        {
+            Type = MonitoringType.Website;
+            Environment = environment.Name;
+            Group = source.Group;
+            Source = source.Name;
+            Name = source.Name;
+            Connection = source.ApplicationPool;
+        }
+    }
 }

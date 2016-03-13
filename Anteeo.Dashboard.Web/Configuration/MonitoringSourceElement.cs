@@ -27,6 +27,20 @@ namespace Anteeo.Dashboard.Web.Configuration
             set { base["url"] = value; }
         }
 
+        [ConfigurationProperty("applicationPool", DefaultValue = "", IsKey = false, IsRequired = false)]
+        public string ApplicationPool
+        {
+            get { return (string)base["applicationPool"]; }
+            set { base["applicationPool"] = value; }
+        }
+
+        [ConfigurationProperty("monitorCPU", DefaultValue = false, IsKey = false, IsRequired = false)]
+        public bool MonitorCPU
+        {
+            get { return (bool)base["monitorCPU"]; }
+            set { base["monitorCPU"] = value; }
+        }
+
         [ConfigurationProperty("databases", IsKey = false, IsRequired = false)]
         public MonitoringDatabaseElementCollection Databases
         {

@@ -21,6 +21,9 @@ namespace Anteeo.Dashboard.Web
             builder.RegisterType<DatabaseMonitoringCommandHandler>()
                 .SingleInstance()
                 .Keyed<IMonitoringCommandHandler>(MonitoringType.Database);
+            builder.RegisterType<CPUUsageMonitoringCommandHandler>()
+                .SingleInstance()
+                .Keyed<IMonitoringCommandHandler>(MonitoringType.CPUUsage);
 
             builder.RegisterType<MonitoringFactory>().AsImplementedInterfaces().SingleInstance();
 

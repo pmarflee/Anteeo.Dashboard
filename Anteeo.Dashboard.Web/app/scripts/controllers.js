@@ -76,11 +76,17 @@ app.controller('DashboardCtrl', ['$scope', '$log', 'backendHubProxy', 'Notificat
             };
 
         var monitoringHub = backendHubProxy(backendHubProxy.defaultServer, "monitoringHub", { logging: true });
+
         monitoringHub.on("broadcastMonitoring", function (result) {
             $log.log(result);
 
             updateStatus(result);
         });
+
+        monitoringHub.on("broadcastPerformanceMonitoring", function (result) {
+            $log.log(result);
+        });
+
         monitoringHub.start(function () {
             monitoringHub.invoke("getDashboard", function (dashboard) {
                 $scope.dashboard = dashboard;

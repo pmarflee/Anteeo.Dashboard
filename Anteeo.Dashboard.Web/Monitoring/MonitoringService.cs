@@ -45,6 +45,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
             _polling = true;
 
             Task.Run(async () => await OnMonitor());
+            Task.Run(async () => await OnMonitorPerformance());
         }
 
         public void Stop()
@@ -56,7 +57,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
         {
            while (_polling)
            {
-                var monitoringTasks = CreateCommands()
+                var monitoringTasks = CreateMonitoringCommands()
                     .Select(command => _commandHandlers[command.Type].Handle(command))
                     .ToList();
 
@@ -81,7 +82,34 @@ namespace Anteeo.Dashboard.Web.Monitoring
             }            
         }
 
-        private IEnumerable<MonitoringCommand> CreateCommands()
+        private async Task OnMonitorPerformance()
+        {
+            while (_polling)
+            {
+                var monitoringTasks = CreatePerformanceMonitoringCommands()
+                    .Select(command => _commandHandlers[MonitoringType.CPUUsage].Handle(command))
+                    .ToList();
+
+                var results = new List<MonitoringResult>(monitoringTasks.Count);
+
+                while (monitoringTasks.Count > 0)
+                {
+                    var firstFinishedTask = await Task.WhenAny(monitoringTasks);
+
+                    monitoringTasks.Remove(firstFinishedTask);
+
+                    var result = await firstFinishedTask;
+
+                    results.Add(result);
+
+                    BroadcastPerformanceMonitoringResult(result);
+                }
+
+                await Task.Delay(_configuration.PerformancePollInterval);
+            }
+        }
+
+        private IEnumerable<MonitoringCommand> CreateMonitoringCommands()
         {
             foreach (var environment in _configuration.Environments)
             {
@@ -97,6 +125,14 @@ namespace Anteeo.Dashboard.Web.Monitoring
             }
         }
 
+        private IEnumerable<MonitoringCommand> CreatePerformanceMonitoringCommands()
+        {
+            return from environment in _configuration.Environments
+                   from source in environment.Sources
+                   where source.MonitorCPU && !string.IsNullOrEmpty(source.ApplicationPool)
+                   select new CPUUsageMonitoringCommand(environment, source);
+        }
+
         private void SetCurrentStatus(IEnumerable<MonitoringResult> results)
         {
             CurrentStatus = _monitoringFactory.Create(results);
@@ -105,6 +141,11 @@ namespace Anteeo.Dashboard.Web.Monitoring
         private void BroadcastMonitoringResult(MonitoringResult result)
         {
             _connectionManager.GetHubContext<MonitoringHub>().Clients.All.broadcastMonitoring(result);
+        }
+
+        private void BroadcastPerformanceMonitoringResult(MonitoringResult result)
+        {
+            _connectionManager.GetHubContext<MonitoringHub>().Clients.All.broadcastPerformanceMonitoring(result);
         }
     }
 }

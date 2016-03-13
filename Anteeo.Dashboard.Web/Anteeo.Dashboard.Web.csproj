@@ -89,6 +89,7 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -203,6 +204,7 @@
     <Compile Include="Configuration\MonitoringSourceElement.cs" />
     <Compile Include="Configuration\MonitoringSourceElementCollection.cs" />
     <Compile Include="Models\MonitoringFactory.cs" />
+    <Compile Include="Monitoring\CPUUsageMonitoringCommandHandler.cs" />
     <Compile Include="Monitoring\Enums.cs" />
     <Compile Include="SignalR\SignalRContractResolver.cs" />
     <Compile Include="SignalR\SignalRStartup.cs" />
