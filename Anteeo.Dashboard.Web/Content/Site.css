@@ -11,16 +11,11 @@ body {
     padding-right: 15px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-/*input[type="text"],
-input[type="password"],
-input[type="email"] {
-    max-width: 280px;
-}*/
-
-div.panel-success,
-div.panel-warning,
-div.panel-danger {
-  -webkit-animation-name: flash;
-  animation-name: flash;
+.flash-add {
+    transition: 0s linear all;
+    background: yellow;
+}
+.flash-add.flash-add-active {
+    transition: 0.5s ease-in all;
+    background: none;
 }

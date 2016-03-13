@@ -5,6 +5,7 @@ angular.module('dashboard', [
     'ngAnimate',
     'ui.bootstrap',
     'ui-notification',
+    'animate-change',
     'dashboard.services',
     'dashboard.directives',
     'dashboard.controllers'])
