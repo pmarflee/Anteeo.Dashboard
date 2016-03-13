@@ -4,6 +4,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
 {
     public abstract class MonitoringCommand
     {
+        public MonitoringType Type { get; protected set; }
         public string Environment { get; protected set; }
         public string Group { get; protected set; }
         public string Source { get; protected set; }
@@ -17,6 +18,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
             IMonitoringEnvironmentConfiguration environment,
             IMonitoringSourceConfiguration source)
         {
+            Type = MonitoringType.Website;
             Environment = environment.Name;
             Group = source.Group;
             Source = source.Name;
@@ -32,6 +34,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
             IMonitoringSourceConfiguration source,
             IMonitoringDatabaseConfiguration database)
         {
+            Type = MonitoringType.Database;
             Environment = environment.Name;
             Group = source.Group;
             Source = source.Name;

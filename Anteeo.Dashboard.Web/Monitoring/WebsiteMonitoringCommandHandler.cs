@@ -16,7 +16,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
                         Environment = command.Environment,
                         Group = command.Group,
                         Source = command.Source,
-                        Type = MonitoringResultType.Website,
+                        Type = MonitoringType.Website,
                         Name = command.Name,
                         Status = response.IsSuccessStatusCode ? Models.Status.Success : Models.Status.Danger,
                         Message = response.ReasonPhrase

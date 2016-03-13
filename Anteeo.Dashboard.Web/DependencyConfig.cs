@@ -15,10 +15,12 @@ namespace Anteeo.Dashboard.Web
 
             builder.RegisterInstance(ConfigurationSettings.MonitoringConfiguration).ExternallyOwned();
 
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                .AsClosedTypesOf(typeof(IMonitoringCommandHandler<>))
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            builder.RegisterType<WebsiteMonitoringCommandHandler>()
+                .SingleInstance()
+                .Keyed<IMonitoringCommandHandler>(MonitoringType.Website);
+            builder.RegisterType<DatabaseMonitoringCommandHandler>()
+                .SingleInstance()
+                .Keyed<IMonitoringCommandHandler>(MonitoringType.Database);
 
             builder.RegisterType<MonitoringFactory>().AsImplementedInterfaces().SingleInstance();
 

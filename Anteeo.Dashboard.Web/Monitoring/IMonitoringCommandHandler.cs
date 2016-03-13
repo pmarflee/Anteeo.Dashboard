@@ -7,7 +7,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
         Task<MonitoringResult> Handle(MonitoringCommand command);
     }
 
-    public interface IMonitoringCommandHandler<TMonitoringCommand> : IMonitoringCommandHandler
+    public interface IMonitoringCommandHandler<out TMonitoringCommand> : IMonitoringCommandHandler
         where TMonitoringCommand : MonitoringCommand
     {
     }

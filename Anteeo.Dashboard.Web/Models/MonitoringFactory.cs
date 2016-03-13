@@ -72,7 +72,7 @@ namespace Anteeo.Dashboard.Web.Models
             IMonitoringSourceConfiguration source,
             IEnumerable<MonitoringResult> results)
         {
-            var sourceResult = results.FirstOrDefault(result => result.Type == MonitoringResultType.Website);
+            var sourceResult = results.FirstOrDefault(result => result.Type == MonitoringType.Website);
             var sourceModel = new Source
             {
                 Name = source.Name,
@@ -82,7 +82,7 @@ namespace Anteeo.Dashboard.Web.Models
             };
 
             var pairs = from database in source.Databases
-                        join result in results.Where(result => result.Type == MonitoringResultType.Database)
+                        join result in results.Where(result => result.Type == MonitoringType.Database)
                         on database.Name equals result.Name into matched
                         from match in matched.DefaultIfEmpty()
                         select new { database, result = match };

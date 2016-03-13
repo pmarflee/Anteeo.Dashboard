@@ -1,6 +1,7 @@
 ﻿using Anteeo.Dashboard.Web.Configuration;
 using Anteeo.Dashboard.Web.Models;
 using Anteeo.Dashboard.Web.SignalR;
+using Autofac.Features.Indexed;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
     public class MonitoringService : IMonitoringService
     {
         private readonly IMonitoringConfiguration _configuration;
-        private readonly IMonitoringCommandHandler<DatabaseMonitoringCommand> _databaseMonitoringCommandHandler;
-        private readonly IMonitoringCommandHandler<WebsiteMonitoringCommand> _websiteMonitoringCommandHandler;
+        private readonly IIndex<MonitoringType, IMonitoringCommandHandler> _commandHandlers;
         private readonly IMonitoringFactory _monitoringFactory;
         private readonly IConnectionManager _connectionManager;
 
@@ -27,14 +27,12 @@ namespace Anteeo.Dashboard.Web.Monitoring
 
         public MonitoringService(
             IMonitoringConfiguration configuration,
-            IMonitoringCommandHandler<WebsiteMonitoringCommand> websiteMonitoringCommandHandler,
-            IMonitoringCommandHandler<DatabaseMonitoringCommand> databaseMonitoringCommandHandler,
+            IIndex<MonitoringType, IMonitoringCommandHandler> commandHandlers,
             IMonitoringFactory monitoringFactory,
             IConnectionManager connectionManager)
         {
             _configuration = configuration;
-            _websiteMonitoringCommandHandler = websiteMonitoringCommandHandler;
-            _databaseMonitoringCommandHandler = databaseMonitoringCommandHandler;
+            _commandHandlers = commandHandlers;
             _monitoringFactory = monitoringFactory;
             _connectionManager = connectionManager;
         }
@@ -58,9 +56,9 @@ namespace Anteeo.Dashboard.Web.Monitoring
         {
            while (_polling)
            {
-                var monitoringTasks = (from command in CreateCommands()
-                                       let handler = (IMonitoringCommandHandler)GetHandlerForCommand((dynamic)command)
-                                       select handler.Handle(command)).ToList();
+                var monitoringTasks = CreateCommands()
+                    .Select(command => _commandHandlers[command.Type].Handle(command))
+                    .ToList();
 
                 var results = new List<MonitoringResult>(monitoringTasks.Count);
 
@@ -97,16 +95,6 @@ namespace Anteeo.Dashboard.Web.Monitoring
                     }
                 }
             }
-        }
-
-        private IMonitoringCommandHandler GetHandlerForCommand(WebsiteMonitoringCommand command)
-        {
-            return _websiteMonitoringCommandHandler;
-        }
-
-        private IMonitoringCommandHandler GetHandlerForCommand(DatabaseMonitoringCommand command)
-        {
-            return _databaseMonitoringCommandHandler;
         }
 
         private void SetCurrentStatus(IEnumerable<MonitoringResult> results)

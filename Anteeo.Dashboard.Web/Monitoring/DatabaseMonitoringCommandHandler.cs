@@ -30,7 +30,7 @@ namespace Anteeo.Dashboard.Web.Monitoring
                     Environment = command.Environment,
                     Group = command.Group,
                     Source = command.Source,
-                    Type = MonitoringResultType.Database,
+                    Type = MonitoringType.Database,
                     Name = command.Name,
                     Status = status,
                     Message = message
