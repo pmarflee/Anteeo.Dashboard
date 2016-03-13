@@ -4,6 +4,7 @@ angular.module('dashboard', [
     'ngRoute',
     'ngAnimate',
     'ui.bootstrap',
+    'ui-notification',
     'dashboard.services',
     'dashboard.directives',
     'dashboard.controllers'])
