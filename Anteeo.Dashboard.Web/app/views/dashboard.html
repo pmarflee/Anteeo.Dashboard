@@ -25,7 +25,7 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="col-md-4" ng-repeat="source in group.sources">
-                                            <div class="panel" ng-class="getPanelStatus(source.status)">
+                                            <div class="panel" ng-class="source.status ? 'panel-' + source.status : 'panel-default'">
                                                 <div class="panel-heading" uib-tooltip="{{ source.message }}">
                                                     <h5 class="panel-title">
                                                         <i class="fa fa-globe fa-lg"></i>
