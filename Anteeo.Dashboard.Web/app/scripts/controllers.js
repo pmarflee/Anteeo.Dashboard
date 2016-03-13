@@ -64,7 +64,7 @@ app.controller('DashboardCtrl', ['$scope', '$log', 'backendHubProxy', 'Notificat
                         return database.name === result.name;
                     });
                     database.status = result.status;
-                    database.message = source.message;
+                    database.message = result.message;
                     break;
             }
 
