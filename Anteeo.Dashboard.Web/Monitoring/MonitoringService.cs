@@ -1,6 +1,7 @@
 ﻿using Anteeo.Dashboard.Web.Configuration;
 using Anteeo.Dashboard.Web.Models;
-using System;
+using Anteeo.Dashboard.Web.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,54 +10,54 @@ namespace Anteeo.Dashboard.Web.Monitoring
 {
     public interface IMonitoringService
     {
-        Models.Monitoring GetCurrentStatus();
-        event EventHandler<MonitoringResult> MonitoringResultPublished;
+        Models.Monitoring CurrentStatus { get; }
+        void Start();
+        void Stop();
     }
 
     public class MonitoringService : IMonitoringService
     {
-        private readonly ITimerProvider _timerProvider;
         private readonly IMonitoringConfiguration _configuration;
         private readonly IMonitoringCommandHandler<DatabaseMonitoringCommand> _databaseMonitoringCommandHandler;
         private readonly IMonitoringCommandHandler<WebsiteMonitoringCommand> _websiteMonitoringCommandHandler;
         private readonly IMonitoringFactory _monitoringFactory;
+        private readonly IConnectionManager _connectionManager;
 
-        private Models.Monitoring _currentStatus;
-
-        private volatile bool _updatingCurrentStatus;
+        private bool _polling;
 
         public MonitoringService(
-            ITimerProvider timerProvider,
             IMonitoringConfiguration configuration,
             IMonitoringCommandHandler<WebsiteMonitoringCommand> websiteMonitoringCommandHandler,
             IMonitoringCommandHandler<DatabaseMonitoringCommand> databaseMonitoringCommandHandler,
-            IMonitoringFactory monitoringFactory)
+            IMonitoringFactory monitoringFactory,
+            IConnectionManager connectionManager)
         {
-            _timerProvider = timerProvider;
             _configuration = configuration;
             _websiteMonitoringCommandHandler = websiteMonitoringCommandHandler;
             _databaseMonitoringCommandHandler = databaseMonitoringCommandHandler;
             _monitoringFactory = monitoringFactory;
+            _connectionManager = connectionManager;
+        }
 
+        public Models.Monitoring CurrentStatus { get; private set; }
+
+        public void Start()
+        {
             SetCurrentStatus(Enumerable.Empty<MonitoringResult>());
+            _polling = true;
 
-            _timerProvider.Register(async state => await OnMonitor(state), _configuration.PollInterval);
+            Task.Run(async () => await OnMonitor());
         }
 
-        public Models.Monitoring GetCurrentStatus()
+        public void Stop()
         {
-            return _currentStatus;
+            _polling = false;
         }
 
-        private async Task OnMonitor(object state)
+        private async Task OnMonitor()
         {
-            if (_updatingCurrentStatus) return;
-
-            try
-            {
-
-                _updatingCurrentStatus = true;
-
+           while (_polling)
+           {
                 var monitoringTasks = (from command in CreateCommands()
                                        let handler = (IMonitoringCommandHandler)GetHandlerForCommand((dynamic)command)
                                        select handler.Handle(command)).ToList();
@@ -77,11 +78,9 @@ namespace Anteeo.Dashboard.Web.Monitoring
                 }
 
                 SetCurrentStatus(results);
-            }
-            finally
-            {
-                _updatingCurrentStatus = false;
-            }
+
+                await Task.Delay(_configuration.PollInterval);
+            }            
         }
 
         private IEnumerable<MonitoringCommand> CreateCommands()
@@ -112,14 +111,12 @@ namespace Anteeo.Dashboard.Web.Monitoring
 
         private void SetCurrentStatus(IEnumerable<MonitoringResult> results)
         {
-            _currentStatus = _monitoringFactory.Create(results);
+            CurrentStatus = _monitoringFactory.Create(results);
         }
 
-        public event EventHandler<MonitoringResult> MonitoringResultPublished;
         private void BroadcastMonitoringResult(MonitoringResult result)
         {
-            if (MonitoringResultPublished != null)
-                MonitoringResultPublished(this, result);
+            _connectionManager.GetHubContext<MonitoringHub>().Clients.All.broadcastMonitoring(result);
         }
     }
 }

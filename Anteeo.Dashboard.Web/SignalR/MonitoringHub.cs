@@ -10,18 +10,11 @@ namespace Anteeo.Dashboard.Web.SignalR
         public MonitoringHub(IMonitoringService monitoringService)
         {
             _monitoringService = monitoringService;
-
-            _monitoringService.MonitoringResultPublished += MonitoringResultPublished;
         }
 
         public Models.Monitoring GetDashboard()
         {
-            return _monitoringService.GetCurrentStatus();
-        }
-
-        public void MonitoringResultPublished(object service, MonitoringResult result)
-        {
-            Clients.All.broadcastMonitoring(result);
+            return _monitoringService.CurrentStatus;
         }
     }
 }

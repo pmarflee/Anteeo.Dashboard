@@ -1,33 +1,34 @@
 ﻿using Anteeo.Dashboard.Web.Configuration;
 using Anteeo.Dashboard.Web.Models;
 using Anteeo.Dashboard.Web.Monitoring;
-using SimpleInjector;
-using SimpleInjector.Integration.Web;
+using Autofac;
+using Autofac.Integration.SignalR;
 using System.Reflection;
 
 namespace Anteeo.Dashboard.Web
 {
     public static class DependencyConfig
     {
-        public static Container Initialise()
+        public static IContainer Initialise()
         {
-            var container = new Container();
+            var builder = new ContainerBuilder();
 
-            container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
+            builder.RegisterInstance(ConfigurationSettings.MonitoringConfiguration).ExternallyOwned();
 
-            container.RegisterSingleton(ConfigurationSettings.MonitoringConfiguration);
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .AsClosedTypesOf(typeof(IMonitoringCommandHandler<>))
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
-            container.Register(typeof(IMonitoringCommandHandler<>), new[] { Assembly.GetExecutingAssembly() }, Lifestyle.Singleton);
+            builder.RegisterType<MonitoringFactory>().AsImplementedInterfaces().SingleInstance();
 
-            container.RegisterSingleton<IMonitoringFactory, MonitoringFactory>();
+            builder.RegisterType<TimerProvider>().AsImplementedInterfaces().SingleInstance();
 
-            container.RegisterSingleton<ITimerProvider, TimerProvider>();
+            builder.RegisterType<MonitoringService>().AsImplementedInterfaces().SingleInstance();
 
-            container.RegisterSingleton<IMonitoringService, MonitoringService>();
+            builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
-            container.Verify();
-
-            return container;
+            return builder.Build();
         }
     }
 }
