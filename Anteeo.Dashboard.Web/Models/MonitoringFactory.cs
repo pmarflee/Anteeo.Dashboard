@@ -77,6 +77,7 @@ namespace Anteeo.Dashboard.Web.Models
             {
                 Name = source.Name,
                 Url = source.Url,
+                MonitorCPU = source.MonitorCPU,
                 Status = sourceResult?.Status,
                 Message = sourceResult?.Message
             };

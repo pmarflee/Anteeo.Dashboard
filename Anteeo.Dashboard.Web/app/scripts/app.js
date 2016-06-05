@@ -6,6 +6,7 @@ angular.module('dashboard', [
     'ui.bootstrap',
     'ui-notification',
     'animate-change',
+    'ng.epoch',
     'dashboard.services',
     'dashboard.directives',
     'dashboard.controllers'])

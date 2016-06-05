@@ -1,0 +1,24 @@
+{ 
+	"monitoringInterval": "30000",
+	"performanceInterval": "1000",
+	"environments": [
+		{ 
+			"name": "DESKTOPPC",
+			"sources": [
+				{
+					"name": "TMSWebTest",
+					"url": "https://tmswebtest.anteeo.co.uk/Test",
+					"group": "TMSWeb",
+					"applicationPool": "DefaultAppPool",
+					"monitorCPU": "true",
+					"databases": [
+						{
+							"name": "conn1",
+							"connectionString": "Server=DESKTOPPC\\SQLEXPRESS;Database=TrelloTrackerx;Trusted_Connection=True;"
+						}
+					]
+				}
+			]
+		}
+	]
+}

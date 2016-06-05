@@ -58,6 +58,10 @@ namespace Anteeo.Dashboard.Web.Models
 
         public string Message { get; set; }
 
+        public bool MonitorCPU { get; set; }
+
+        public float PercentProcessorTime { get; set; }
+
         public IList<Database> Databases { get; private set; }
     }
 

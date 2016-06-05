@@ -33,6 +33,28 @@
                                                     </h5>
                                                 </div>
                                                 <div class="panel-body">
+                                                    <div class="panel panel-dashboard" ng-show="source.monitorCPU">
+                                                        <div class="panel-heading">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 text-center">
+                                                                    <div class="huge">{{ source.percentProcessorTime }}</div>
+                                                                    <div class="controls left"><i class="ion ion-more"></i></div>
+                                                                    <div class="controls right"><a class="remove"><i class="ion ion-minus-round"></i></a></div>
+                                                                    <div class="center">Responsive Timeline</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.panel-heading -->
+                                                        <div class="panel-body">
+                                                            <div>
+                                                                <div>
+                                                                    <epoch-live-line chart-class="category10" chart-height="200" chart-data="realtimeLine" chart-stream="realtimeLineFeed" chart-axes="areaAxes"></epoch-live-line>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- /.panel-body -->
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-md-3" ng-repeat="database in source.databases">
                                                             <div class="panel" ng-class="getPanelStatus(database.status)">
